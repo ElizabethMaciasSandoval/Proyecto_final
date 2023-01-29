@@ -38,7 +38,7 @@ productsController.post('/', async (req, res) => {
 })
 
 productsController.put('/', async (req, res) => {
-  const {id,  description, price, status, stock, category, thumbnails} = req.body;
+  const {id, title ,description, price, status, stock, category, thumbnails} = req.body;
   const product = {
     title,
     description,
