@@ -51,7 +51,7 @@ export class ProductManager {
     try {
       let data = await fs.promises.readFile(this.path, 'utf-8');
       data = JSON.parse(data);
-      const index = data.findIndex(product => product.id === id);
+      const index = data.findIndex(product => product.id == id);
       data[index] = {
         ...data[index],
         ...product
