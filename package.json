@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ElizabethMaciasSandoval/Proyecto_final#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
   }
 }
