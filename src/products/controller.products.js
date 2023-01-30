@@ -10,35 +10,43 @@ productsController.get('/', async (req, res) => {
   const { limit } = req.query;
   if(limit){
     const productsLimit = products.slice(0, Number(limit));
-    return res.json({message: productsLimit});
+    return res.status(200).json({status:'successfully listed products',produsts: productsLimit});
   }else{
-    return res.json({message: products});
+    return res.status(200).json({status:'successfully listed products',produsts: products});
   }
 })
 
 productsController.get('/:id', async (req, res) => {
   const { id } = req.params;
   const productById = await manager.getProductById(Number(id));
-  res.json({message: productById});
+  if (!productById) {
+    return res.status(404).json({status:`product with id ${id} not found`})
+  }
+  res.status(200).json({status:'products found successfully', product: productById});
 })
 
 productsController.post('/', async (req, res) => {
   const {title, description, price, status, stock, category, thumbnails} = req.body;
-  const product = {
-    title,
-    description,
-    price,
-    status,
-    stock,
-    category,
-    thumbnails
-  };
-  await manager.addProduct(product);
-  res.json({message: product});
+  if(!title|| !description || !price || !status || !stock || !category || !thumbnails){
+    return res.status(406).json({status: 'cannot save product missing properties'})
+  }else{
+    const product = {
+      title,
+      description,
+      price,
+      status,
+      stock,
+      category,
+      thumbnails
+    };
+    await manager.addProduct(product);
+    return res.status(200).json({status:'products added successfully',product: product});
+  }
 })
 
-productsController.put('/', async (req, res) => {
-  const {id, title ,description, price, status, stock, category, thumbnails} = req.body;
+productsController.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const {title ,description, price, status, stock, category, thumbnails} = req.body;
   const product = {
     title,
     description,
@@ -49,11 +57,11 @@ productsController.put('/', async (req, res) => {
     thumbnails
   };
   await manager.updateProduct(id, product);
-  res.json({message: product});
+  res.status(200).json({status:'product updated successfully', product: product});
 })
 
 productsController.delete('/:id', async (req, res) => {
   const { id } = req.params;
   await manager.deleteProduct(Number(id));
-  res.json({message: 'product removed successfully'});
+  return res.status(200).json({status: 'product removed successfully'});
 })
